@@ -12,13 +12,13 @@ class PageManager {
   final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
 
   late AudioPlayer _audioPlayer;
-  PageManager() {
-    _init();
+  PageManager(String path) {
+    _init(path);
   }
 
-  void _init() async {
+  void _init(String path) async {
     _audioPlayer = AudioPlayer();
-    await _audioPlayer.setAsset("assets/gazo.mp3");
+    await _audioPlayer.setAsset(path);
 
     _audioPlayer.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;
@@ -78,6 +78,12 @@ class PageManager {
 
   void dispose() {
     _audioPlayer.dispose();
+  }
+
+  void changeSong(String path) async {
+    _audioPlayer.stop();
+    await _audioPlayer.setAsset(path);
+    play();
   }
 }
 

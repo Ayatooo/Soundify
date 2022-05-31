@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _pageManager = PageManager();
+    _pageManager = PageManager(myMusicList[0].urlSong);
   }
 
   @override
@@ -53,21 +53,24 @@ class _MyHomePageState extends State<MyHomePage> {
       'Haine & Sex',
       'Gazo',
       'assets/gazo.jpg',
-      'https://www.youtube.com/watch?v=pzpp4EehoPA&ab_channel=GAZOOFFICIEL',
+      'assets/gazo.mp3',
     ),
     Music(
-      'Bailando',
-      'Carlos Vives',
-      'assets/images/bailando.jpg',
-      'https://www.youtube.com/watch?v=pzpp4EehoPA&ab_channel=GAZOOFFICIEL',
+      'Alicante',
+      'Gambino',
+      'assets/gambino.jpg',
+      'assets/gambino.mp3',
     ),
     Music(
-      'Bailando',
-      'Carlos Vives',
-      'assets/images/bailando.jpg',
-      'https://www.youtube.com/watch?v=pzpp4EehoPA&ab_channel=GAZOOFFICIEL',
+      'Time',
+      'Josman',
+      'assets/josman.jpg',
+      'assets/josman.mp3',
     )
   ];
+
+  int position = 0;
+  int get listSize => myMusicList.length;
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +86,15 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text(
-              '${myMusicList[0].title}',
+              '${myMusicList[position].title}',
               style: Theme.of(context).textTheme.headline3,
             ),
             Text(
-              '${myMusicList[0].singer}',
+              '${myMusicList[position].singer}',
               style: Theme.of(context).textTheme.headline5,
             ),
             Image.asset(
-              '${myMusicList[0].imagePath}',
+              '${myMusicList[position].imagePath}',
               width: 200,
               height: 200,
             ),
@@ -118,7 +121,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.skip_previous),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  position = (position - 1) % listSize;
+                  _pageManager.changeSong(myMusicList[position].urlSong);
+                });
+              },
             ),
             ValueListenableBuilder<ButtonState>(
               valueListenable: _pageManager.buttonNotifier,
@@ -148,7 +156,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             IconButton(
               icon: Icon(Icons.skip_next),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  position = (position + 1) % listSize;
+                  _pageManager.changeSong(myMusicList[position].urlSong);
+                });
+              },
             ),
           ],
         ),
